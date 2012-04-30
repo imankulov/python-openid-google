@@ -22,6 +22,7 @@ class OpenIDOAuthRequest(Extension):
         }
 
 
+
 class OpenIDOAuthResponse(Extension):
 
     ns_alias = 'ext2'
@@ -59,6 +60,35 @@ class OpenIDOAuthResponse(Extension):
             auth_state = AUTHORIZED_REQUEST_TOKEN,
         )
         return request_token_object
+
+
+class OpenIDUIExtension(Extension):
+    """
+    Set up extra UI options
+
+    Options are set according to https://developers.google.com/accounts/docs/OpenID#Parameters
+
+    :param mode: UI mode. Can be None, 'popup' or 'x-has-session'
+    :param icon: Displays the favicon of the referring domain in the OpenID
+                 approval page if set to True
+    """
+
+    ns_uri = 'http://specs.openid.net/extensions/ui/1.0'
+    ns_alias = 'ui'
+
+    def __init__(self, mode=None, icon=False):
+        Extension.__init__(self)
+        self.mode = mode
+        self.icon = icon
+
+    def getExtensionArgs(self):
+        ret = {}
+        if self.mode:
+            ret['mode'] = self.mode
+        if self.icon:
+            ret['icon'] = 'true'
+        return ret
+
 
 # OpenID AX constants
 AX_EMAIL = 'http://axschema.org/contact/email'
